@@ -29,4 +29,5 @@ build/
 
 ### VS Code ###
 .vscode/
+.gradle/
 .DS_Store
