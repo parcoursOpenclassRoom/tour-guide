@@ -90,15 +90,27 @@ public class TourGuideService {
 	 * @param visitedLocation
 	 * @return
 	 */
-	public List<Attraction> getNearByAttractions(VisitedLocation visitedLocation) {
-		List<Attraction> nearbyAttractions = new ArrayList<>();
+	public List<Attraction> getNearByAttractions(VisitedLocation visitedLocation, User user) {
+		List nearbyAttractions = new ArrayList<>();
 		Map<Double, Attraction> attractionsProximity = new TreeMap<>();
 		for (Attraction attraction : gpsUtil.getAttractions()) {
 			attractionsProximity.put(rewardsService.getDistance(attraction, visitedLocation.location), attraction);
 		}
 		attractionsProximity.forEach((distance, attraction) -> {
 			if (nearbyAttractions.size() < 5) {
-				nearbyAttractions.add(attraction);
+				Map nearAttractions = new HashMap();
+				nearAttractions.put("name", attraction.attractionName);
+				Map<String, Double> attractionsLocation = new HashMap<>();
+				Map<String, Double> userLocation = new HashMap<>();
+				attractionsLocation.put("latitude", attraction.latitude);
+				attractionsLocation.put("longitude", attraction.longitude);
+				nearAttractions.put("attractionsLocation", attractionsLocation);
+				userLocation.put("latitude", visitedLocation.location.latitude);
+				userLocation.put("longitude", visitedLocation.location.longitude);
+				nearAttractions.put("userLocation", userLocation);
+				nearAttractions.put("distance", rewardsService.getDistance(attraction, visitedLocation.location));
+				nearAttractions.put("points", rewardsService.getRewardPoints(attraction, user));
+				nearbyAttractions.add(nearAttractions);
 			}
 		});
 		return nearbyAttractions;
