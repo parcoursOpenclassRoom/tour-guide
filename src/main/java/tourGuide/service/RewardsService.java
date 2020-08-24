@@ -1,6 +1,5 @@
 package tourGuide.service;
 
-import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.springframework.stereotype.Service;
@@ -66,6 +65,12 @@ public class RewardsService {
 		return getDistance(attraction, visitedLocation.location) > proximityBuffer ? false : true;
 	}
 
+	/**
+	 * points for visiting each Attraction.
+	 * @param attraction
+	 * @param user
+	 * @return
+	 */
 	public int getRewardPoints(Attraction attraction, User user) {
 		return rewardsCentral.getAttractionRewardPoints(attraction.attractionId, user.getUserId());
 	}
