@@ -85,6 +85,11 @@ public class TourGuideService {
 		return visitedLocation;
 	}
 
+	/**
+	 * returns the 5 nearby attractions from the GPS coordinates
+	 * @param visitedLocation
+	 * @return
+	 */
 	public List<Attraction> getNearByAttractions(VisitedLocation visitedLocation) {
 		List<Attraction> nearbyAttractions = new ArrayList<>();
 		Map<Double, Attraction> attractionsProximity = new TreeMap<>();
@@ -151,12 +156,23 @@ public class TourGuideService {
 	    return Date.from(localDateTime.toInstant(ZoneOffset.UTC));
 	}
 
+	/**
+	 * add user preferences
+	 * @param userName
+	 * @param userPreferences
+	 * @return
+	 */
 	public UserPreferences addPreferences(String userName, UserPreferences userPreferences) {
 		User user = getUser(userName);
 		user.setUserPreferences(userPreferences);
 		return userPreferences;
 	}
 
+	/**
+	 * retrieve a user's preferences
+	 * @param userName
+	 * @return
+	 */
 	public UserPreferences getPreferences(String userName) {
 		User user = getUser(userName);
 		return user.getUserPreferences();

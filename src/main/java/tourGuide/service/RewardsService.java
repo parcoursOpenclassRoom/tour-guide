@@ -35,7 +35,11 @@ public class RewardsService {
 	public void setDefaultProximityBuffer() {
 		proximityBuffer = defaultProximityBuffer;
 	}
-	
+
+	/**
+	 * Determine the rewards to be awarded to each user
+	 * @param user
+	 */
 	public void calculateRewards(User user) {
 		CopyOnWriteArrayList<Attraction> attractions = new CopyOnWriteArrayList<>();
 		CopyOnWriteArrayList<VisitedLocation> userLocations = new CopyOnWriteArrayList<>();

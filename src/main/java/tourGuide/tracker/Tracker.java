@@ -33,6 +33,11 @@ public class Tracker extends Thread {
         executorService.shutdownNow();
     }
 
+    /**
+     * this method starts the main thread
+     * It uses the CompletableFuture to launch asynchronous tasks
+     * its main function is to retrieve the gps position of users asynchronously
+     */
     @Override
     public void run() {
         Locale.setDefault(Locale.ENGLISH);
@@ -46,9 +51,12 @@ public class Tracker extends Thread {
             List<User> users = tourGuideService.getAllUsers();
             logger.debug("Begin Tracker. Tracking " + users.size() + " users.");
             stopWatch.start();
+            // for each position to retrieve, an asynchronous task is recorded
             users.forEach(u -> futures.add(CompletableFuture.runAsync(() -> tourGuideService.trackUserLocation(u))));
+            // we start all the tasks
             CompletableFuture<Void> combinedFuture = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
             try {
+                // we are waiting for it all to end
                 combinedFuture.get();
             } catch (InterruptedException | ExecutionException e ) {
                 e.printStackTrace();

@@ -28,10 +28,22 @@ public class TourGuideController {
         return "Greetings from TourGuide!";
     }
 
+    /**
+     * save a user's preferences from his username
+     * @param userName
+     * @param userPreferences
+     * @return
+     */
     @PostMapping("/add-user-preferences")
     public UserPreferences addPreferences(@RequestParam String userName, @RequestBody UserPreferences userPreferences) {
         return tourGuideService.addPreferences(userName, userPreferences);
     }
+
+    /**
+     * get user's preferences from his username
+     * @param userName
+     * @return
+     */
     @GetMapping("/get-user-preferences")
     public UserPreferences getPreferences(@RequestParam String userName) {
         return tourGuideService.getPreferences(userName);
@@ -42,17 +54,22 @@ public class TourGuideController {
     	VisitedLocation visitedLocation = tourGuideService.getUserLocation(getUser(userName));
 		return JsonStream.serialize(visitedLocation.location);
     }
-    
- 	//  Instead: Get the closest five tourist attractions to the user - no matter how far away they are.
- 	//  Return a new JSON object that contains:
-    	// Name of Tourist attraction,
+
+    /**
+     * retrieve the 5 attractions close to the user
+     * @param userName
+     * @return
+     */
+    @RequestMapping("/getNearbyAttractions") 
+    public List<Attraction> getNearbyAttractions(@RequestParam String userName) {
+        //  Instead: Get the closest five tourist attractions to the user - no matter how far away they are.
+        //  Return a new JSON object that contains:
+        // Name of Tourist attraction,
         // Tourist attractions lat/long,
         // The user's location lat/long,
         // The distance in miles between the user's location and each of the attractions.
         // The reward points for visiting each Attraction.
         //    Note: Attraction reward points can be gathered from RewardsCentral
-    @RequestMapping("/getNearbyAttractions") 
-    public List<Attraction> getNearbyAttractions(@RequestParam String userName) {
         VisitedLocation visitedLocation = tourGuideService.getUserLocation(getUser(userName));
         return tourGuideService.getNearByAttractions(visitedLocation);
     }
