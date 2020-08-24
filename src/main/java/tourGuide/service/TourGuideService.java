@@ -16,9 +16,9 @@ import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
 import tourGuide.helper.InternalTestHelper;
 import tourGuide.tracker.Tracker;
-import tourGuide.user.User;
-import tourGuide.user.UserPreferences;
-import tourGuide.user.UserReward;
+import tourGuide.model.user.User;
+import tourGuide.model.user.UserPreferences;
+import tourGuide.model.user.UserReward;
 import tripPricer.Provider;
 import tripPricer.TripPricer;
 
@@ -160,5 +160,14 @@ public class TourGuideService {
 	public UserPreferences getPreferences(String userName) {
 		User user = getUser(userName);
 		return user.getUserPreferences();
+	}
+
+	public Map<UUID, Location> getAllCurrentLocations() {
+		Map<UUID, Location> loc = new HashMap();
+		for (User user: getAllUsers()){
+			Location location = user.getLastVisitedLocation() != null ? user.getLastVisitedLocation().location : null;
+			loc.put(user.getUserId(),location );
+		}
+		return loc;
 	}
 }
