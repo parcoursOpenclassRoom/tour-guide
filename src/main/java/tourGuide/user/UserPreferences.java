@@ -16,9 +16,10 @@ public class UserPreferences {
 	private int ticketQuantity = 1;
 	private int numberOfAdults = 1;
 	private int numberOfChildren = 0;
-	
+
 	public UserPreferences() {
 	}
+
 	
 	public void setAttractionProximity(int attractionProximity) {
 		this.attractionProximity = attractionProximity;
@@ -38,10 +39,6 @@ public class UserPreferences {
 
 	public Money getHighPricePoint() {
 		return highPricePoint;
-	}
-
-	public void setHighPricePoint(Money highPricePoint) {
-		this.highPricePoint = highPricePoint;
 	}
 	
 	public int getTripDuration() {
@@ -76,4 +73,7 @@ public class UserPreferences {
 		this.numberOfChildren = numberOfChildren;
 	}
 
+	public CurrencyUnit getCurrency() {
+		return currency;
+	}
 }

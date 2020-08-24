@@ -2,6 +2,7 @@ package tourGuide.tracker;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.*;
 
 import org.apache.commons.lang3.time.StopWatch;
@@ -34,6 +35,7 @@ public class Tracker extends Thread {
 
     @Override
     public void run() {
+        Locale.setDefault(Locale.ENGLISH);
         StopWatch stopWatch = new StopWatch();
         List<CompletableFuture> futures = new ArrayList();
         while (true) {
