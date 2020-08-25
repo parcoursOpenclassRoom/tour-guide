@@ -176,7 +176,8 @@ public class TourGuideService {
 	 */
 	public UserPreferences addPreferences(String userName, UserPreferences userPreferences) {
 		User user = getUser(userName);
-		user.setUserPreferences(userPreferences);
+		if(user != null)
+			user.setUserPreferences(userPreferences);
 		return userPreferences;
 	}
 
