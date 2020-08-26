@@ -31,3 +31,7 @@ build/
 .vscode/
 .gradle/
 .DS_Store
+
+/.gradle/
+gradlew
+gradlew.bat
