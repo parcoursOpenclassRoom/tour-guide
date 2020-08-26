@@ -20,6 +20,7 @@ import tourGuide.model.user.UserPreferences;
 
 import javax.money.Monetary;
 
+
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.springframework.http.MediaType.APPLICATION_JSON;

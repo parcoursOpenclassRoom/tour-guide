@@ -3,6 +3,8 @@ package tourGuide.service;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -26,7 +28,7 @@ import tripPricer.TripPricer;
 @Service
 public class TourGuideService {
 	@Autowired
-	GpsUtilRepository gpsUtilRepository;
+	private GpsUtilRepository gpsUtilRepository;
 
 	private Logger logger = LoggerFactory.getLogger(TourGuideService.class);
 	// private final GpsUtil gpsUtil;
@@ -49,18 +51,14 @@ public class TourGuideService {
 		addShutDownHook();
 	}
 
-	public void setGpsUtilRepository(GpsUtilRepository gpsUtilRepository) {
-		this.gpsUtilRepository = gpsUtilRepository;
-	}
-
 	public List<UserReward> getUserRewards(User user) {
 		return user.getUserRewards();
 	}
 
-	public VisitedLocation getUserLocation(User user) {
+	public VisitedLocation getUserLocation(User user) throws ExecutionException, InterruptedException {
 		VisitedLocation visitedLocation = (user.getVisitedLocations().size() > 0) ?
 			user.getLastVisitedLocation() :
-			trackUserLocation(user);
+			trackUserLocation(user).get();
 		return visitedLocation;
 	}
 	
@@ -86,13 +84,19 @@ public class TourGuideService {
 		return providers;
 	}
 
-	public VisitedLocation trackUserLocation(User user) {
-		System.out.println("gpsUtilRepository");
-		System.out.println(gpsUtilRepository);
-		VisitedLocation visitedLocation = gpsUtilRepository.getUserLocation(user.getUserId());
-		user.addToVisitedLocations(visitedLocation);
-		rewardsService.calculateRewards(user);
-		return visitedLocation;
+	public CompletableFuture<VisitedLocation> trackUserLocation(User user) {
+		return CompletableFuture.supplyAsync(() -> {
+			VisitedLocation visitedLocation = gpsUtilRepository.getUserLocation(user.getUserId());
+			user.addToVisitedLocations(visitedLocation);
+			try {
+				rewardsService.calculateRewards(user);
+			} catch (ExecutionException e) {
+				e.printStackTrace();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
+			return visitedLocation;
+		});
 	}
 
 	/**
@@ -103,7 +107,6 @@ public class TourGuideService {
 	public List<Attraction> getNearByAttractions(VisitedLocation visitedLocation, User user) {
 		List nearbyAttractions = new ArrayList<>();
 		Map<Double, Attraction> attractionsProximity = new TreeMap<>();
-		System.out.println(gpsUtilRepository.getAttraction().size());
 		for (Attraction attraction : gpsUtilRepository.getAttraction()) {
 			attractionsProximity.put(rewardsService.getDistance(attraction, visitedLocation.location), attraction);
 		}
@@ -143,7 +146,7 @@ public class TourGuideService {
 	private static final String tripPricerApiKey = "test-server-api-key";
 	// Database connection will be used for external users, but for testing purposes internal users are provided and stored in memory
 	private final Map<String, User> internalUserMap = new HashMap<>();
-	private void initializeInternalUsers() {
+	public void initializeInternalUsers() {
 		IntStream.range(0, InternalTestHelper.getInternalUserNumber()).forEach(i -> {
 			String userName = "internalUser" + i;
 			String phone = "000";
@@ -186,8 +189,11 @@ public class TourGuideService {
 	 * @return
 	 */
 	public UserPreferences addPreferences(String userName, UserPreferences userPreferences) {
+		if(getAllUsers().size() == 0)
+			initializeInternalUsers();
 		User user = getUser(userName);
-		user.setUserPreferences(userPreferences);
+		if(user != null)
+			user.setUserPreferences(userPreferences);
 		return userPreferences;
 	}
 
@@ -198,7 +204,7 @@ public class TourGuideService {
 	 */
 	public UserPreferences getPreferences(String userName) {
 		User user = getUser(userName);
-		return user.getUserPreferences();
+		return user != null ? user.getUserPreferences() : null;
 	}
 
 	public Map<UUID, Location> getAllCurrentLocations() {
