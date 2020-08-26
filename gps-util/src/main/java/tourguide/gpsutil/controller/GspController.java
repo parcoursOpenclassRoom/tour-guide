@@ -25,4 +25,5 @@ public class GspController {
     public VisitedLocation getUserLocation(@RequestParam UUID userId){
         return gpsUtilManager.getUserLocation(userId);
     }
+
 }
