@@ -14,7 +14,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import rewardCentral.RewardCentral;
 import tourGuide.helper.InternalTestHelper;
 import tourGuide.model.gps.Attraction;
 import tourGuide.model.gps.VisitedLocation;
@@ -52,7 +51,7 @@ public class TestPerformance {
 	 */
 	@Test
 	public void highVolumeTrackLocation() throws ExecutionException, InterruptedException {
-		RewardsService rewardsService = new RewardsService(new RewardCentral());
+		RewardsService rewardsService = new RewardsService();
 		beanFactory.autowireBean(rewardsService);
 		// Users should be incremented up to 100,000, and test finishes within 15 minutes
 		InternalTestHelper.setInternalUserNumber(100);
@@ -77,7 +76,7 @@ public class TestPerformance {
 	@Test
 	public void highVolumeGetRewards() {
 		// Users should be incremented up to 100,000, and test finishes within 20 minutes
-		RewardsService rewardsService = new RewardsService(new RewardCentral());
+		RewardsService rewardsService = new RewardsService();
 		beanFactory.autowireBean(rewardsService);
 		InternalTestHelper.setInternalUserNumber(100);
 		TourGuideService tourGuideService = new TourGuideService(rewardsService);

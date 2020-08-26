@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import rewardCentral.RewardCentral;
 import tourGuide.helper.InternalTestHelper;
 import tourGuide.model.gps.Attraction;
 import tourGuide.model.gps.VisitedLocation;
@@ -34,7 +33,7 @@ public class TestTourGuideService {
 
 	@Test
 	public void getUserLocation() throws ExecutionException, InterruptedException {
-        RewardsService rewardsService = new RewardsService(new RewardCentral());
+        RewardsService rewardsService = new RewardsService();
         beanFactory.autowireBean(rewardsService);
         TourGuideService tourGuideService = new TourGuideService(rewardsService);
         beanFactory.autowireBean(tourGuideService);
@@ -49,7 +48,7 @@ public class TestTourGuideService {
 	
 	@Test
 	public void addUser() {
-        RewardsService rewardsService = new RewardsService(new RewardCentral());
+        RewardsService rewardsService = new RewardsService();
         beanFactory.autowireBean(rewardsService);
         TourGuideService tourGuideService = new TourGuideService(rewardsService);
         beanFactory.autowireBean(tourGuideService);
@@ -72,7 +71,7 @@ public class TestTourGuideService {
 	
 	@Test
 	public void getAllUsers() {
-        RewardsService rewardsService = new RewardsService(new RewardCentral());
+        RewardsService rewardsService = new RewardsService();
         beanFactory.autowireBean(rewardsService);
         TourGuideService tourGuideService = new TourGuideService(rewardsService);
         beanFactory.autowireBean(tourGuideService);
@@ -94,7 +93,7 @@ public class TestTourGuideService {
 	
 	@Test
 	public void trackUser() throws ExecutionException, InterruptedException {
-        RewardsService rewardsService = new RewardsService(new RewardCentral());
+        RewardsService rewardsService = new RewardsService();
         beanFactory.autowireBean(rewardsService);
         TourGuideService tourGuideService = new TourGuideService(rewardsService);
         beanFactory.autowireBean(tourGuideService);
@@ -110,7 +109,7 @@ public class TestTourGuideService {
 	
 	@Test
 	public void getNearbyAttractions() throws ExecutionException, InterruptedException {
-        RewardsService rewardsService = new RewardsService(new RewardCentral());
+        RewardsService rewardsService = new RewardsService();
         beanFactory.autowireBean(rewardsService);
         TourGuideService tourGuideService = new TourGuideService(rewardsService);
         beanFactory.autowireBean(tourGuideService);
@@ -128,7 +127,7 @@ public class TestTourGuideService {
 
 	@Test
 	public void getTripDeals() {
-        RewardsService rewardsService = new RewardsService(new RewardCentral());
+        RewardsService rewardsService = new RewardsService();
         beanFactory.autowireBean(rewardsService);
         TourGuideService tourGuideService = new TourGuideService(rewardsService);
         beanFactory.autowireBean(tourGuideService);
@@ -145,7 +144,7 @@ public class TestTourGuideService {
 
 	@Test
 	public void preferencesTest() {
-        RewardsService rewardsService = new RewardsService(new RewardCentral());
+        RewardsService rewardsService = new RewardsService();
         beanFactory.autowireBean(rewardsService);
         TourGuideService tourGuideService = new TourGuideService(rewardsService);
         beanFactory.autowireBean(tourGuideService);
@@ -169,7 +168,7 @@ public class TestTourGuideService {
 
 	@Test
 	public void getAllCurrentLocations() {
-        RewardsService rewardsService = new RewardsService(new RewardCentral());
+        RewardsService rewardsService = new RewardsService();
         beanFactory.autowireBean(rewardsService);
         TourGuideService tourGuideService = new TourGuideService(rewardsService);
         beanFactory.autowireBean(tourGuideService);

@@ -40,8 +40,6 @@ dependencies {
     compile group: 'org.springframework.cloud', name: 'spring-cloud-starter-openfeign', version: '2.1.0.RELEASE'
     testCompile group: 'org.mockito', name: 'mockito-junit-jupiter', version: '3.5.5'
 
-    compile(name:'gpsUtil', ext:'jar')
-    compile(name:'RewardCentral', ext:'jar')
     compile(name:'TripPricer', ext:'jar')
 
     testCompile("junit:junit")

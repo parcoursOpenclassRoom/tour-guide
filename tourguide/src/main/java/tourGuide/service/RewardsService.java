@@ -7,18 +7,20 @@ import java.util.concurrent.ExecutionException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import rewardCentral.RewardCentral;
 import tourGuide.model.gps.Attraction;
 import tourGuide.model.gps.Location;
 import tourGuide.model.gps.VisitedLocation;
 import tourGuide.model.user.User;
 import tourGuide.model.user.UserReward;
 import tourGuide.repository.GpsUtilRepository;
+import tourGuide.repository.RewardCentralRepository;
 
 @Service
 public class RewardsService {
 	@Autowired
 	GpsUtilRepository gpsUtilRepository;
+	@Autowired
+	RewardCentralRepository rewardCentralRepository;
 
     private static final double STATUTE_MILES_PER_NAUTICAL_MILE = 1.15077945;
 
@@ -27,11 +29,6 @@ public class RewardsService {
 	private int proximityBuffer = defaultProximityBuffer;
 	private int attractionProximityRange = 200;
 	//private final GpsUtil gpsUtil;
-	private final RewardCentral rewardsCentral;
-	
-	public RewardsService(RewardCentral rewardCentral) {
-		this.rewardsCentral = rewardCentral;
-	}
 
 	public void setProximityBuffer(int proximityBuffer) {
 		this.proximityBuffer = proximityBuffer;
@@ -79,7 +76,7 @@ public class RewardsService {
 	 * @return
 	 */
 	public int getRewardPoints(Attraction attraction, User user) {
-		return rewardsCentral.getAttractionRewardPoints(attraction.attractionId, user.getUserId());
+		return rewardCentralRepository.getRewardPoints(attraction.attractionId, user.getUserId());
 	}
 	
 	public double getDistance(Location loc1, Location loc2) {
