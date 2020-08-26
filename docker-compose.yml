@@ -1,0 +1,17 @@
+version: '3'
+services:
+  gpsUtil:
+    build: microservice-gps-util
+    image: microservice-gps-util
+    ports:
+      - 8081:8081
+  rewardCentral:
+    build: microservice-reward-central
+    image: microservice-reward-central
+    ports:
+      - 8082:8082
+  tourGuide:
+    build: tourguide
+    image: tourguide
+    ports:
+      - 8080:8080
