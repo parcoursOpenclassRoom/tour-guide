@@ -3,6 +3,7 @@ package tourGuide;
 import static org.junit.Assert.assertTrue;
 
 import java.util.*;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -54,34 +55,43 @@ public class TestPerformance {
 		RewardsService rewardsService = new RewardsService();
 		beanFactory.autowireBean(rewardsService);
 		// Users should be incremented up to 100,000, and test finishes within 15 minutes
-		InternalTestHelper.setInternalUserNumber(100);
+		InternalTestHelper.setInternalUserNumber(100000);
 		TourGuideService tourGuideService = new TourGuideService(rewardsService);
 		beanFactory.autowireBean(tourGuideService);
 
 		List<User> allUsers = new ArrayList<>();
 		allUsers = tourGuideService.getAllUsers();
-		
+		List<CompletableFuture> futures = new ArrayList();
 	    StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
-		for(User user : allUsers) {
-			tourGuideService.trackUserLocation(user).get();
-		}
-		stopWatch.stop();
 		tourGuideService.tracker.stopTracking();
+		allUsers.forEach(u -> futures.add(CompletableFuture.runAsync(() -> {
+			try {
+				tourGuideService.trackUserLocation(u).get();
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			} catch (ExecutionException e) {
+				e.printStackTrace();
+			}
+		})));
+		CompletableFuture<Void> combinedFuture = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
+		combinedFuture.get();
+		stopWatch.stop();
 
-		System.out.println("highVolumeTrackLocation: Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds."); 
+
+		System.out.println("jhfgdgdtzifj highVolumeTrackLocation: Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.");
 		assertTrue(TimeUnit.MINUTES.toSeconds(15) >= TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()));
 	}
 
 	@Test
-	public void highVolumeGetRewards() {
+	public void highVolumeGetRewards() throws ExecutionException, InterruptedException {
 		// Users should be incremented up to 100,000, and test finishes within 20 minutes
 		RewardsService rewardsService = new RewardsService();
 		beanFactory.autowireBean(rewardsService);
-		InternalTestHelper.setInternalUserNumber(100);
+		InternalTestHelper.setInternalUserNumber(100000);
 		TourGuideService tourGuideService = new TourGuideService(rewardsService);
 		beanFactory.autowireBean(tourGuideService);
-		InternalTestHelper.setInternalUserNumber(100);
+		List<CompletableFuture> futures = new ArrayList();
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
 
@@ -89,24 +99,25 @@ public class TestPerformance {
 		List<User> allUsers = new ArrayList<>();
 		allUsers = tourGuideService.getAllUsers();
 		allUsers.forEach(u -> u.addToVisitedLocations(new VisitedLocation(u.getUserId(), attraction, new Date())));
-	     
-	    allUsers.forEach(u -> {
+		tourGuideService.tracker.stopTracking();
+		allUsers.forEach(u -> futures.add(CompletableFuture.runAsync(() -> {
 			try {
-				rewardsService.calculateRewards(u);
-			} catch (ExecutionException e) {
-				e.printStackTrace();
+				rewardsService.calculateRewards(u).get();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
+			} catch (ExecutionException e) {
+				e.printStackTrace();
 			}
-		});
-	    
+		})));
+		CompletableFuture<Void> combinedFuture = CompletableFuture.allOf(futures.toArray(new CompletableFuture[0]));
+		combinedFuture.get();
+
 		for(User user : allUsers) {
 			assertTrue(user.getUserRewards().size() > 0);
 		}
 		stopWatch.stop();
-		tourGuideService.tracker.stopTracking();
 
-		System.out.println("highVolumeGetRewards: Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds."); 
+		System.out.println("jhfgdgdtzifj highVolumeGetRewards: Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.");
 		assertTrue(TimeUnit.MINUTES.toSeconds(20) >= TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()));
 	}
 

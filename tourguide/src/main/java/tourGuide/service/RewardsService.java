@@ -1,5 +1,6 @@
 package tourGuide.service;
 
+import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.ExecutionException;
@@ -42,9 +43,9 @@ public class RewardsService {
 	 * Determine the rewards to be awarded to each user
 	 * @param user
 	 */
-	public void calculateRewards(User user) throws ExecutionException, InterruptedException {
-		CompletableFuture future = CompletableFuture.runAsync(() -> {
-			CopyOnWriteArrayList<Attraction> attractions = new CopyOnWriteArrayList<>();
+	public CompletableFuture calculateRewards(User user) {
+		 return CompletableFuture.runAsync(() -> {
+		 	List<Attraction> attractions = gpsUtilRepository.getAttraction();
 			CopyOnWriteArrayList<VisitedLocation> userLocations = new CopyOnWriteArrayList<>();
 			attractions.addAll(gpsUtilRepository.getAttraction());
 			userLocations.addAll(user.getVisitedLocations());
@@ -58,7 +59,6 @@ public class RewardsService {
 				}
 			}
 		});
-		future.get();
 	}
 	
 	public boolean isWithinAttractionProximity(Attraction attraction, Location location) {
