@@ -55,7 +55,7 @@ public class TestPerformance {
 		RewardsService rewardsService = new RewardsService();
 		beanFactory.autowireBean(rewardsService);
 		// Users should be incremented up to 100,000, and test finishes within 15 minutes
-		InternalTestHelper.setInternalUserNumber(100000);
+		InternalTestHelper.setInternalUserNumber(100);
 		TourGuideService tourGuideService = new TourGuideService(rewardsService);
 		beanFactory.autowireBean(tourGuideService);
 
@@ -79,7 +79,7 @@ public class TestPerformance {
 		stopWatch.stop();
 
 
-		System.out.println("jhfgdgdtzifj highVolumeTrackLocation: Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.");
+		System.out.println("highVolumeTrackLocation: Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.");
 		assertTrue(TimeUnit.MINUTES.toSeconds(15) >= TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()));
 	}
 
@@ -88,7 +88,7 @@ public class TestPerformance {
 		// Users should be incremented up to 100,000, and test finishes within 20 minutes
 		RewardsService rewardsService = new RewardsService();
 		beanFactory.autowireBean(rewardsService);
-		InternalTestHelper.setInternalUserNumber(100000);
+		InternalTestHelper.setInternalUserNumber(100);
 		TourGuideService tourGuideService = new TourGuideService(rewardsService);
 		beanFactory.autowireBean(tourGuideService);
 		List<CompletableFuture> futures = new ArrayList();
@@ -117,7 +117,7 @@ public class TestPerformance {
 		}
 		stopWatch.stop();
 
-		System.out.println("jhfgdgdtzifj highVolumeGetRewards: Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.");
+		System.out.println("highVolumeGetRewards: Time Elapsed: " + TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()) + " seconds.");
 		assertTrue(TimeUnit.MINUTES.toSeconds(20) >= TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()));
 	}
 
