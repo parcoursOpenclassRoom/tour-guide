@@ -9,7 +9,7 @@ import tourGuide.model.gps.VisitedLocation;
 import java.util.List;
 import java.util.UUID;
 
-@FeignClient(name = "microservice-gps-util", url = "localhost:8081")
+@FeignClient(name = "microservice-gps-util", url = "localhost:8082")
 public interface GpsUtilRepository {
 
     @GetMapping("/attraction")

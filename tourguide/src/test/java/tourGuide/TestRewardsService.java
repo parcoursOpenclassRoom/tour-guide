@@ -71,8 +71,7 @@ public class TestRewardsService {
 		rewardsService.setProximityBuffer(Integer.MAX_VALUE);
 
 		InternalTestHelper.setInternalUserNumber(1);
-		tourGuideService.initializeInternalUsers();
-		rewardsService.calculateRewards(tourGuideService.getAllUsers().get(0));
+		rewardsService.calculateRewards(tourGuideService.getAllUsers().get(0)).get();
 		List<UserReward> userRewards = tourGuideService.getUserRewards(tourGuideService.getAllUsers().get(0));
 		tourGuideService.tracker.stopTracking();
 		assertEquals(gpsUtilRepository.getAttraction().size(), userRewards.size());

@@ -44,7 +44,7 @@ public class RewardsService {
 	 * @param user
 	 */
 	public CompletableFuture calculateRewards(User user) {
-		 return CompletableFuture.runAsync(() -> {
+		  return CompletableFuture.runAsync(() -> {
 		 	List<Attraction> attractions = gpsUtilRepository.getAttraction();
 			CopyOnWriteArrayList<VisitedLocation> userLocations = new CopyOnWriteArrayList<>();
 			attractions.addAll(gpsUtilRepository.getAttraction());
