@@ -4,6 +4,9 @@ TourGuide est une application existante qui permet aux utilisateurs de voir les 
 # Diagramme de classe
 ![alt text](uml.png)
 
+# Architecture
+![alt text](Architecture.png)
+
 ## Getting Started
 
 Comment lancer le projet?
